@@ -2,7 +2,7 @@ package com.ftc.basecommon.result;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.ftc.basecommon.Enums.RestfulResultEnum;
+import com.ftc.basecommon.enums.RestfulResultEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.ftc.basecommon.Enums.RestfulResultEnum;
+import com.ftc.basecommon.enums.RestfulResultEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
