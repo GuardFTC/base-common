@@ -1,4 +1,7 @@
+#spring相关配置
 spring:
+
+  #添加该配置后，解决Swagger异常
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

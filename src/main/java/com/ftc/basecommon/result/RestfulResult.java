@@ -1,6 +1,7 @@
 package com.ftc.basecommon.result;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.ftc.basecommon.enums.RestfulResultEnum;
 import io.swagger.annotations.ApiModelProperty;
@@ -46,7 +47,7 @@ public class RestfulResult<T> {
      */
     public static RestfulResult<Object> fail(int code, Object msg) {
         String errorMessage = StrUtil.format(RestfulResultEnum.ERROR_MESSAGE.getMessage(), JSONUtil.toJsonStr(msg));
-        return new RestfulResult<>(code, errorMessage, new Object());
+        return new RestfulResult<>(code, errorMessage, new JSONObject());
     }
 
     /**
