@@ -5,3 +5,11 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+#swagger配置
+swagger:
+  enabled: true
+  title: '测试系统'
+  description: "测试系统"
+  version: '1.0'
+  base-package: com.ftc.basecommon

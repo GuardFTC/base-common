@@ -1,7 +1,9 @@
 package com.ftc.basecommon.test;
 
 import cn.hutool.core.lang.Console;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -19,12 +21,14 @@ import java.io.Serializable;
  * @date: 2022-12-15 10:16:32
  * @describe: 测试Controller
  */
+@Api("测试Controller")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/v1/rest/test")
 public class TestController {
 
     @PostMapping
+    @ApiOperation("测试POST添加接口")
     public void add(@Validated @RequestBody TestEntity testEntity) {
         Console.log(testEntity);
     }
