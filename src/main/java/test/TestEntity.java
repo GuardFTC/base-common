@@ -1,4 +1,4 @@
-package com.ftc.basecommon.test;
+package test;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

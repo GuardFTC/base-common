@@ -1,8 +1,10 @@
 package com.ftc.basecommon.exception.handler.server;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.StaticLog;
 import com.ftc.basecommon.exception.exception.server.SaveException;
 import com.ftc.basecommon.exception.exception.server.UpdateException;
+import com.ftc.basecommon.exception.template.log.server.ServerExceptionLogTemplate;
 import com.ftc.basecommon.result.RestfulResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +29,7 @@ public class DataBaseExceptionHandler {
     public RestfulResult<Object> handle(SaveException exception) {
 
         //1.打印日志
-        StaticLog.error(exception.getMessage());
+        StaticLog.error(StrUtil.format(ServerExceptionLogTemplate.SAVE_DATA, exception.getMessage()));
 
         //2.返回异常信息
         return RestfulResult.ServerException.internalError(exception.getMessage());
@@ -44,7 +46,7 @@ public class DataBaseExceptionHandler {
     public RestfulResult<Object> handle(UpdateException exception) {
 
         //1.打印日志
-        StaticLog.error(exception.getMessage());
+        StaticLog.error(StrUtil.format(ServerExceptionLogTemplate.UPDATE_DATA, exception.getMessage()));
 
         //2.返回异常信息
         return RestfulResult.ServerException.internalError(exception.getMessage());

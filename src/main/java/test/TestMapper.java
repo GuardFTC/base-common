@@ -1,4 +1,4 @@
-package com.ftc.basecommon.test;
+package test;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 

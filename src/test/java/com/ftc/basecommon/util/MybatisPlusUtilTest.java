@@ -6,9 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ftc.basecommon.exception.exception.client.NotAcceptException;
 import com.ftc.basecommon.exception.exception.client.NotFoundException;
 import com.ftc.basecommon.exception.exception.server.SaveException;
-import com.ftc.basecommon.test.TestServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import test.TestServiceImpl;
 
 import java.util.List;
 
@@ -132,7 +132,7 @@ class MybatisPlusUtilTest {
 
         //2.获取真实Service数据类型
         serviceTypeName = MybatisPlusUtil.getServiceTypeName(new TestServiceImpl());
-        resultType = "com.ftc.basecommon.test.TestEntity";
+        resultType = "test.TestEntity";
         Assert.isTrue(resultType.equals(serviceTypeName));
     }
 }
