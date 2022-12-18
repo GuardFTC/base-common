@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.log.StaticLog;
 import com.ftc.basecommon.result.RestfulResult;
+import com.ftc.basecommon.template.log.error.ClientExceptionTemplate;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,7 +28,7 @@ public class ParamExceptionHandler {
      * 请求体参数异常处理类
      *
      * @param request   HTTP请求,用于获取请求URL
-     * @param exception 捕获的异常
+     * @param exception 请求体参数异常
      * @return 异常信息
      */
     @ResponseBody
@@ -46,7 +47,7 @@ public class ParamExceptionHandler {
             String method = request.getMethod();
             for (ObjectError error : exception.getBindingResult().getAllErrors()) {
                 String errorMessage = error.getDefaultMessage();
-                StaticLog.warn("[请求参数异常] IP=[{}] 请求方法=[{}] URL=[{}] 异常=[{}]", ip, method, url, errorMessage);
+                StaticLog.warn(ClientExceptionTemplate.BAD_REQUEST, ip, method, url, errorMessage);
                 errorMessages.add(errorMessage);
             }
         }
@@ -59,7 +60,7 @@ public class ParamExceptionHandler {
      * URL参数异常处理类
      *
      * @param request   HTTP请求,用于获取请求URL
-     * @param exception 捕获的异常
+     * @param exception URL参数异常
      * @return 异常信息
      */
     @ResponseBody
@@ -71,7 +72,7 @@ public class ParamExceptionHandler {
         String url = request.getRequestURI();
         String method = request.getMethod();
         String errorMessage = exception.getMessage();
-        StaticLog.warn("[请求参数异常] IP=[{}] 请求方法=[{}] URL=[{}] 异常=[{}]", ip, method, url, errorMessage);
+        StaticLog.warn(ClientExceptionTemplate.BAD_REQUEST, ip, method, url, errorMessage);
 
         //2.返回异常信息
         return RestfulResult.ClientException.badRequest(errorMessage);

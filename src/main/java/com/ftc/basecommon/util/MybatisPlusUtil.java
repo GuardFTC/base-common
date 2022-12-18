@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ftc.basecommon.exception.server.DataExistException;
 import com.ftc.basecommon.exception.server.DataNotExistException;
+import com.ftc.basecommon.exception.server.SaveException;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class MybatisPlusUtil {
      * @param countThreshold 触发批量保存数量阈值
      * @param <T>            数据泛型类
      */
-    public <T> void saveBatch(List<T> dataList, IService<T> iService, int countThreshold) {
+    public static <T> void saveBatch(List<T> dataList, IService<T> iService, int countThreshold) {
 
         //1.初始化计数器
         int count = 0;
@@ -40,10 +41,14 @@ public class MybatisPlusUtil {
 
             //5.到达存储数量阈值开始储存
             if (countThreshold == saveList.size()) {
-                iService.saveBatch(saveList);
+                if (!(iService.saveBatch(saveList))) {
+                    throw new SaveException(data.getClass());
+                }
                 saveList.clear();
             } else if (count == dataList.size()) {
-                iService.saveBatch(saveList);
+                if (!(iService.saveBatch(saveList))) {
+                    throw new SaveException(data.getClass());
+                }
                 saveList.clear();
             }
         }
@@ -57,14 +62,14 @@ public class MybatisPlusUtil {
      * @param <T>     泛型
      * @return 根据主键ID获取的对象
      */
-    private <T> T getAndCheckNotExist(Integer id, IService<T> service) {
+    public static <T> T getAndCheckNotExist(Integer id, IService<T> service) {
 
         //1.查询并校验样本
         T data = service.getById(id);
 
-        //2.校验是否存在
+        //2.校验是否不存在
         if (ObjectUtil.isNull(data)) {
-            throw new DataNotExistException(id, data.getClass());
+            throw new DataNotExistException(id, service.getClass());
         }
 
         //3.返回
@@ -77,9 +82,8 @@ public class MybatisPlusUtil {
      * @param id      主键ID
      * @param service IService接口
      * @param <T>     泛型
-     * @return 根据主键ID获取的对象
      */
-    private <T> T getAndCheckExist(Integer id, IService<T> service) {
+    public static <T> void getAndCheckExist(Integer id, IService<T> service) {
 
         //1.查询
         T data = service.getById(id);
@@ -88,8 +92,5 @@ public class MybatisPlusUtil {
         if (ObjectUtil.isNotNull(data)) {
             throw new DataExistException(id, data.getClass());
         }
-
-        //3.返回
-        return data;
     }
 }
