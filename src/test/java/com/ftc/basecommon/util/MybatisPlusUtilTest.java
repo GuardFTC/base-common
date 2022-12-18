@@ -3,9 +3,10 @@ package com.ftc.basecommon.util;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ftc.basecommon.exception.server.DataExistException;
-import com.ftc.basecommon.exception.server.DataNotExistException;
-import com.ftc.basecommon.exception.server.SaveException;
+import com.ftc.basecommon.exception.exception.client.NotAcceptException;
+import com.ftc.basecommon.exception.exception.client.NotFoundException;
+import com.ftc.basecommon.exception.exception.server.SaveException;
+import com.ftc.basecommon.test.TestServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -50,7 +51,7 @@ class MybatisPlusUtilTest {
         });
 
         //4.验证异常信息
-        String errorMessage = "[保存数据异常] 数据类型:[class java.lang.Integer]";
+        String errorMessage = "数据:[[-2147483648]]批量保存异常";
         Assert.isTrue(errorMessage.equals(exception.getMessage()));
     }
 
@@ -80,12 +81,12 @@ class MybatisPlusUtilTest {
         Mockito.when(mockService.getById(Mockito.anyInt())).thenReturn(null);
 
         //3.调用
-        DataNotExistException exception = assertThrows(DataNotExistException.class, () -> {
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
             MybatisPlusUtil.getAndCheckNotExist(id, mockService);
         });
 
         //4.验证
-        String errorMessage = "[数据不存在异常] 主键ID:[-2147483648]";
+        String errorMessage = "根据主键ID:[-2147483648]获取类型:[java.lang.Object]数据,未找到";
         Assert.isTrue(exception.getMessage().contains(errorMessage));
     }
 
@@ -112,12 +113,26 @@ class MybatisPlusUtilTest {
         Mockito.when(mockService.getById(Mockito.anyInt())).thenReturn(Integer.MIN_VALUE);
 
         //3.调用
-        DataExistException exception = assertThrows(DataExistException.class, () -> {
+        NotAcceptException exception = assertThrows(NotAcceptException.class, () -> {
             MybatisPlusUtil.getAndCheckExist(id, mockService);
         });
 
         //4.验证
-        String errorMessage = "[数据已存在异常] 主键ID:[-2147483648] 数据类型:[class java.lang.Integer]";
+        String errorMessage = "接口流程因参数异常中断,异常原因:[根据主键ID:[-2147483648]获取类型:[java.lang.Integer]数据,已存在]";
         Assert.isTrue(errorMessage.equals(exception.getMessage()));
+    }
+
+    @Test
+    void getServiceTypeName() {
+
+        //1.获取MockService数据类型
+        String serviceTypeName = MybatisPlusUtil.getServiceTypeName(mockService);
+        String resultType = "java.lang.Object";
+        Assert.isTrue(resultType.equals(serviceTypeName));
+
+        //2.获取真实Service数据类型
+        serviceTypeName = MybatisPlusUtil.getServiceTypeName(new TestServiceImpl());
+        resultType = "com.ftc.basecommon.test.TestEntity";
+        Assert.isTrue(resultType.equals(serviceTypeName));
     }
 }

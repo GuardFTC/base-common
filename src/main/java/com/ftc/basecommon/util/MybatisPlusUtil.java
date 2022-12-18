@@ -3,10 +3,12 @@ package com.ftc.basecommon.util;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ftc.basecommon.exception.server.DataExistException;
-import com.ftc.basecommon.exception.server.DataNotExistException;
-import com.ftc.basecommon.exception.server.SaveException;
+import com.ftc.basecommon.exception.exception.client.NotAcceptException;
+import com.ftc.basecommon.exception.exception.client.NotFoundException;
+import com.ftc.basecommon.exception.exception.server.SaveException;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -42,12 +44,12 @@ public class MybatisPlusUtil {
             //5.到达存储数量阈值开始储存
             if (countThreshold == saveList.size()) {
                 if (!(iService.saveBatch(saveList))) {
-                    throw new SaveException(data.getClass());
+                    throw new SaveException(saveList);
                 }
                 saveList.clear();
             } else if (count == dataList.size()) {
                 if (!(iService.saveBatch(saveList))) {
-                    throw new SaveException(data.getClass());
+                    throw new SaveException(saveList);
                 }
                 saveList.clear();
             }
@@ -69,7 +71,7 @@ public class MybatisPlusUtil {
 
         //2.校验是否不存在
         if (ObjectUtil.isNull(data)) {
-            throw new DataNotExistException(id, service.getClass());
+            throw new NotFoundException(id, getServiceTypeName(service));
         }
 
         //3.返回
@@ -90,7 +92,31 @@ public class MybatisPlusUtil {
 
         //2.校验是否存在
         if (ObjectUtil.isNotNull(data)) {
-            throw new DataExistException(id, data.getClass());
+            throw new NotAcceptException(id, data.getClass().getTypeName());
         }
+    }
+
+    /**
+     * 获取IService数据类型
+     *
+     * @param service IService接口
+     * @param <T>     泛型
+     * @return IService数据类型
+     */
+    public static <T> String getServiceTypeName(IService<T> service) {
+
+        //1.获取类型判定
+        Type genericSuperclass = service.getClass().getGenericSuperclass();
+        if (!(genericSuperclass instanceof ParameterizedType)) {
+            return genericSuperclass.getTypeName();
+        }
+
+        //2.转型
+        ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
+        Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+
+        //3.返回
+        Type actualTypeArgument = actualTypeArguments[1];
+        return actualTypeArgument.getTypeName();
     }
 }

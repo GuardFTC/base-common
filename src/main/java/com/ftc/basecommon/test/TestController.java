@@ -2,19 +2,13 @@ package com.ftc.basecommon.test;
 
 import cn.hutool.core.lang.Console;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
  * @author: 冯铁城 [17615007230@163.com]
@@ -31,14 +25,5 @@ public class TestController {
     @ApiOperation("测试POST添加接口")
     public void add(@Validated @RequestBody TestEntity testEntity) {
         Console.log(testEntity);
-    }
-
-    @Data
-    private static class TestEntity implements Serializable {
-
-        @ApiModelProperty("年龄字符串")
-        @NotBlank(message = "年龄字符串不能为空")
-        @Min(value = 3, message = "年龄字符串不能小于3")
-        private String ageStr;
     }
 }

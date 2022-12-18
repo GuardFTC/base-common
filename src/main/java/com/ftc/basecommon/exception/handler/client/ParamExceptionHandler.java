@@ -1,11 +1,12 @@
-package com.ftc.basecommon.handler.client;
+package com.ftc.basecommon.exception.handler.client;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import cn.hutool.log.StaticLog;
+import com.ftc.basecommon.exception.template.log.client.ClientExceptionLogTemplate;
 import com.ftc.basecommon.result.RestfulResult;
-import com.ftc.basecommon.template.log.error.ClientExceptionTemplate;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,16 +44,20 @@ public class ParamExceptionHandler {
 
             //3.获取日志参数
             String ip = ServletUtil.getClientIP(request);
-            String url = request.getRequestURI();
             String method = request.getMethod();
+            String url = request.getRequestURI();
             for (ObjectError error : exception.getBindingResult().getAllErrors()) {
+
+                //4.存入结果集
                 String errorMessage = error.getDefaultMessage();
-                StaticLog.warn(ClientExceptionTemplate.BAD_REQUEST, ip, method, url, errorMessage);
                 errorMessages.add(errorMessage);
+
+                //5.打印日志
+                StaticLog.warn(StrUtil.format(ClientExceptionLogTemplate.BAD_REQUEST, ip, method, url, errorMessage));
             }
         }
 
-        //4.返回异常信息
+        //6.返回异常信息
         return RestfulResult.ClientException.badRequest(errorMessages);
     }
 
@@ -69,10 +74,10 @@ public class ParamExceptionHandler {
 
         //1.获取URL、请求方式以及异常信息
         String ip = ServletUtil.getClientIP(request);
-        String url = request.getRequestURI();
         String method = request.getMethod();
+        String url = request.getRequestURI();
         String errorMessage = exception.getMessage();
-        StaticLog.warn(ClientExceptionTemplate.BAD_REQUEST, ip, method, url, errorMessage);
+        StaticLog.warn(StrUtil.format(ClientExceptionLogTemplate.BAD_REQUEST, ip, method, url, errorMessage));
 
         //2.返回异常信息
         return RestfulResult.ClientException.badRequest(errorMessage);
