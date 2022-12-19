@@ -64,7 +64,7 @@ public class RedisTemplateConfig {
         //1.线程池设置
         GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
         poolConfig.setMaxTotal(redisConfigProperties.getMaxActive());
-        poolConfig.setMaxWaitMillis(redisConfigProperties.getMaxWait());
+        poolConfig.setMaxWait(Duration.ofMillis(redisConfigProperties.getMaxWait()));
         poolConfig.setMaxIdle(redisConfigProperties.getMaxIdle());
         poolConfig.setMinIdle(redisConfigProperties.getMinIdle());
 
