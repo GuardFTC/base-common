@@ -53,3 +53,30 @@ swagger:
   description: "测试系统"
   version: '1.0'
   base-package: com.ftc.basecommon
+
+#配置Redis数据源(支持多数据源)
+redis:
+
+  #主数据源Redis
+  primary:
+    host: 120.48.107.224
+    port: 6379
+    password:
+    database: 0
+    timeout: 6000
+    max-active: 150
+    max-wait: 100
+    max-idle: 100
+    min-idle: 50
+
+  #备数据源Redis
+  secondary:
+    host: 120.48.107.224
+    port: 6379
+    password:
+    database: 1
+    timeout: 6000
+    max-active: 150
+    max-wait: 100
+    max-idle: 100
+    min-idle: 50
