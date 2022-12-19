@@ -23,7 +23,7 @@ class ServerExceptionTest {
         saveException = new SaveException(CollUtil.newArrayList(1, 2, 3));
 
         //4.校验
-        errorMessage = "数据:[[1, 2, 3]]批量保存异常";
+        errorMessage = "数据:[[1,2,3]]批量保存异常";
         Assert.isTrue(errorMessage.equals(saveException.getMessage()));
     }
 
@@ -41,7 +41,7 @@ class ServerExceptionTest {
         updateException = new UpdateException(CollUtil.newArrayList(1, 2, 3));
 
         //4.校验
-        errorMessage = "数据:[[1, 2, 3]]批量更新异常";
+        errorMessage = "数据:[[1,2,3]]批量更新异常";
         Assert.isTrue(errorMessage.equals(updateException.getMessage()));
     }
 }

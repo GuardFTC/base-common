@@ -1,6 +1,7 @@
 package com.ftc.basecommon.exception.exception.server;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.ftc.basecommon.exception.template.message.server.ServerExceptionMessageTemplate;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class SaveException extends RuntimeException {
      * @param <T>  数据泛型类
      */
     public <T> SaveException(T data) {
-        super(StrUtil.format(ServerExceptionMessageTemplate.SAVE_DATA, data));
+        super(StrUtil.format(ServerExceptionMessageTemplate.SAVE_DATA, JSONUtil.toJsonStr(data)));
     }
 
     /**
@@ -29,6 +30,6 @@ public class SaveException extends RuntimeException {
      * @param <T>      数据泛型类
      */
     public <T> SaveException(List<T> dataList) {
-        super(StrUtil.format(ServerExceptionMessageTemplate.SAVE_BATCH_DATA, dataList));
+        super(StrUtil.format(ServerExceptionMessageTemplate.SAVE_BATCH_DATA, JSONUtil.toJsonStr(dataList)));
     }
 }

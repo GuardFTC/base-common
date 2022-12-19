@@ -8,7 +8,7 @@ import com.ftc.basecommon.exception.exception.client.NotFoundException;
 import com.ftc.basecommon.exception.exception.server.SaveException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import test.TestServiceImpl;
+import test.local.service.impl.TableServiceImpl;
 
 import java.util.List;
 
@@ -131,8 +131,8 @@ class MybatisPlusUtilTest {
         Assert.isTrue(resultType.equals(serviceTypeName));
 
         //2.获取真实Service数据类型
-        serviceTypeName = MybatisPlusUtil.getServiceTypeName(new TestServiceImpl());
-        resultType = "test.TestEntity";
+        serviceTypeName = MybatisPlusUtil.getServiceTypeName(new TableServiceImpl());
+        resultType = "test.local.entity.TableEntity";
         Assert.isTrue(resultType.equals(serviceTypeName));
     }
 }

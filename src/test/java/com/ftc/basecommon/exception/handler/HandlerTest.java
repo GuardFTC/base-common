@@ -18,9 +18,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import test.TestController;
-import test.TestEntity;
-import test.TestService;
+import test.local.controller.TableController;
+import test.local.entity.TableEntity;
+import test.local.service.TableService;
 import util.AssertController;
 import util.MockInitUtil;
 
@@ -33,10 +33,10 @@ class HandlerTest {
     private MockMvc mockMvc;
 
     @InjectMocks
-    private TestController testController;
+    private TableController testController;
 
     @Mock
-    private TestService testService;
+    private TableService testService;
 
     /*----------------------------------每个单元测试执行之前执行---------------------------------*/
     @BeforeEach
@@ -64,7 +64,7 @@ class HandlerTest {
     void BodyParamError() {
 
         //1.年龄字符串为空
-        TestEntity testEntity = new TestEntity();
+        TableEntity testEntity = new TableEntity();
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .post("http://localhost:8080/api/v1/rest/test")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -78,7 +78,7 @@ class HandlerTest {
         );
 
         //3.年龄字符串小于3
-        testEntity = new TestEntity();
+        testEntity = new TableEntity();
         testEntity.setAgeStr("1");
         request = MockMvcRequestBuilders
                 .post("http://localhost:8080/api/v1/rest/test")
@@ -109,15 +109,15 @@ class HandlerTest {
         );
 
         //2.NotAcceptException
-        Mockito.when(testService.getById(1)).thenReturn(new TestEntity());
-        Mockito.when(testService.getById(2)).thenReturn(new TestEntity());
+        Mockito.when(testService.getById(1)).thenReturn(new TableEntity());
+        Mockito.when(testService.getById(2)).thenReturn(new TableEntity());
         request = MockMvcRequestBuilders
                 .get("http://localhost:8080/api/v1/rest/test")
                 .param("age", String.valueOf(Integer.MAX_VALUE));
         AssertController.checkErrorResponse(
                 mockMvc.perform(request).andReturn(),
                 HttpStatus.NOT_ACCEPTABLE.value(),
-                "接口流程因参数异常中断,异常原因:[根据主键ID:[2]获取类型:[test.TestEntity]数据,已存在]"
+                "接口流程因参数异常中断,异常原因:[根据主键ID:[2]获取类型:[test.local.entity.TableEntity]数据,已存在]"
         );
     }
 
@@ -126,7 +126,7 @@ class HandlerTest {
     void ServerException() {
 
         //1.SaveException
-        Mockito.when(testService.getById(1)).thenReturn(new TestEntity());
+        Mockito.when(testService.getById(1)).thenReturn(new TableEntity());
         Mockito.when(testService.getById(2)).thenReturn(null);
         Mockito.when(testService.saveBatch(Mockito.anyList())).thenReturn(false);
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
@@ -135,11 +135,11 @@ class HandlerTest {
         AssertController.checkErrorResponse(
                 mockMvc.perform(request).andReturn(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "数据:[[TestEntity(ageStr=null)]]批量保存异常"
+                "数据:[[{}]]批量保存异常"
         );
 
         //2.UpdateException
-        Mockito.when(testService.getById(1)).thenReturn(new TestEntity());
+        Mockito.when(testService.getById(1)).thenReturn(new TableEntity());
         Mockito.when(testService.getById(2)).thenReturn(null);
         Mockito.when(testService.saveBatch(Mockito.anyList())).thenReturn(true);
         request = MockMvcRequestBuilders
@@ -148,7 +148,7 @@ class HandlerTest {
         AssertController.checkErrorResponse(
                 mockMvc.perform(request).andReturn(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "数据:[2147483647]更新异常"
+                "数据:[{}]更新异常"
         );
     }
 }
