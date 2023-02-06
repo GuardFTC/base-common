@@ -28,9 +28,6 @@ public class CodeGenerator {
         //1.获取项目路径
         String projectPath = System.getProperty("user.dir");
 
-        System.out.println(projectPath);
-        System.out.println("D:\\Code\\Projects\\Java\\base-common\\src\\main\\java\\test");
-
         //2.生成代码自动生成器
         FastAutoGenerator generator = FastAutoGenerator.create(URL, USERNAME, PASSWORD)
                 .globalConfig(builder -> builder
